@@ -1,0 +1,28 @@
+name: Megaw
+
+on:
+  workflow_dispatch:
+#  schedule:
+#    - cron: '0 */6 * * *'
+#  push:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+      - name: Connect to VPN
+        uses: "kota65535/github-openvpn-connect-action@v2"
+        with:
+          config_file: main.ovpn
+
+      - name: Set UP NOW
+        run: |
+          docker run -d -p 8558:5900 -v /dev/shm:/dev/shm dorowu/ubuntu-desktop-lxde-vnc && sleep 2h
